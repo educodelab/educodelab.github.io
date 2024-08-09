@@ -66,6 +66,9 @@ function applyWatermark() {
 
         ctx.strokeText(text, x, y);
         ctx.fillText(text, x, y);
+
+        // Show the canvas after applying the watermark
+        canvas.style.display = 'block';
     };
 
     // Detect the image format based on the file type
