@@ -9,7 +9,6 @@ const progressBar = document.getElementById("progress-bar");
 const predefinedLovePercentages = {
   "jaydatt|rani": 100,
   "jaydatt|sneha": 100,
-  "jaydatt|snehaa": 100,
   "raj|lisha": 100,
   "santhosh|eram": 100,
   // Add more pairs as needed
