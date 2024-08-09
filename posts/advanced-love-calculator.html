@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Love Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .love-calculator {
+      max-width: 400px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      text-align: center;
+      background-color: #fff;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .love-calculator h2 {
+      margin-bottom: 20px;
+      font-size: 26px;
+      color: #444;
+    }
+
+    .love-calculator label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .love-calculator input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    .love-calculator button {
+      padding: 10px 20px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      background-color: #28a745;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .love-calculator button:hover {
+      background-color: #218838;
+    }
+
+    .love-calculator button.clear-btn {
+      background-color: #dc3545;
+    }
+
+    .love-calculator button.clear-btn:hover {
+      background-color: #c82333;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 24px;
+    }
+
+    .emoji {
+      margin-top: 10px;
+      font-size: 32px;
+    }
+
+    .loading-spinner {
+      display: none;
+      margin: 20px auto;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #333;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 5px;
+      background-color: #28a745;
+      border-radius: 5px;
+      margin-top: 20px;
+      transition: width 1s ease-in-out;
+    }
+
+    /* Responsive design */
+    @media (max-width: 600px) {
+      .love-calculator {
+        width: 90%;
+        padding: 15px;
+      }
+
+      .love-calculator h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="love-calculator">
+    <h2>Advanced Love Calculator</h2>
+    <label for="your-name">Your Name:</label>
+    <input type="text" id="your-name" placeholder="Your Name">
+    <label for="partner-name">Partner's Name:</label>
+    <input type="text" id="partner-name" placeholder="Partner's Name">
+    <button id="calculate-btn">Calculate</button>
+    <button class="clear-btn" id="clear-btn">Clear</button>
+    <div class="progress-bar" id="progress-bar"></div>
+    <div id="result"></div>
+    <div class="loading-spinner" id="loading-spinner"></div>
+  </div>
+
+  <script>
+    const calculateBtn = document.getElementById("calculate-btn");
+    const clearBtn = document.getElementById("clear-btn");
+    const yourNameInput = document.getElementById("your-name");
+    const partnerNameInput = document.getElementById("partner-name");
+    const resultContainer = document.getElementById("result");
+    const loadingSpinner = document.getElementById("loading-spinner");
+    const progressBar = document.getElementById("progress-bar");
+
+    const predefinedLovePercentages = {
+      "jaydatt|rani": 100,
+      "jaydatt|sneha": 100,
+      "jaydatt|snehaa": 100,
+      "raj|lisha": 100,
+      "santhosh|eram": 100,
+      // Add more pairs as needed
+    };
+
+    calculateBtn.addEventListener("click", () => {
+      clearResult();
+
+      const yourName = yourNameInput.value.trim();
+      const partnerName = partnerNameInput.value.trim();
+
+      if (!validateInputs(yourName, partnerName)) {
+        return;
+      }
+
+      startProgressBar();
+      showLoading(true);
+
+      setTimeout(() => {
+        const lovePercentage = calculateAdvancedLovePercentage(yourName, partnerName);
+        const resultText = `Love Percentage between ${yourName} and ${partnerName}: ${lovePercentage}%`;
+        const emoji = getEmoji(lovePercentage);
+        displayResult(resultText, emoji);
+        showLoading(false);
+        completeProgressBar();
+      }, 2000); // Simulate a delay
+    });
+
+    clearBtn.addEventListener("click", () => {
+      resetForm();
+      clearResult();
+      resetProgressBar();
+    });
+
+    function calculateAdvancedLovePercentage(name1, name2) {
+      const nameKey = createNameKey(name1, name2);
+
+      if (predefinedLovePercentages.hasOwnProperty(nameKey)) {
+        return predefinedLovePercentages[nameKey];
+      }
+
+      // Base percentage on random value between 50 and 100
+      let percentage = getRandomPercentage(50, 100);
+
+      // Add logic for character matching
+      percentage += calculateCharacterMatchScore(name1, name2);
+
+      // Adjust for name length difference
+      percentage -= Math.abs(name1.length - name2.length);
+
+      // Adjust based on vowel count matching
+      percentage += calculateVowelMatchScore(name1, name2);
+
+      // Cap the result between 50 and 100
+      return Math.min(Math.max(percentage, 50), 100);
+    }
+
+    function calculateCharacterMatchScore(name1, name2) {
+      const name1Chars = new Set(name1.toLowerCase());
+      const name2Chars = new Set(name2.toLowerCase());
+      let matchCount = 0;
+
+      name1Chars.forEach(char => {
+        if (name2Chars.has(char)) {
+          matchCount++;
+        }
+      });
+
+      return matchCount * 2; // Each match adds 2% to the score
+    }
+
+    function calculateVowelMatchScore(name1, name2) {
+      const vowels = "aeiou";
+      const name1Vowels = name1.toLowerCase().split("").filter(char => vowels.includes(char));
+      const name2Vowels = name2.toLowerCase().split("").filter(char => vowels.includes(char));
+      let matchCount = 0;
+
+      name1Vowels.forEach(vowel => {
+        if (name2Vowels.includes(vowel)) {
+          matchCount++;
+        }
+      });
+
+      return matchCount * 3; // Each matching vowel adds 3% to the score
+    }
+
+    function createNameKey(name1, name2) {
+      return [name1.toLowerCase(), name2.toLowerCase()].sort().join("|");
+    }
+
+    function getRandomPercentage(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function getEmoji(percentage) {
+      if (percentage >= 81) {
+        return "🥰";
+      } else if (percentage >= 61) {
+        return "😊";
+      } else {
+        return "😢";
+      }
+    }
+
+    function validateInputs(yourName, partnerName) {
+      const namePattern = /^[a-zA-Z\s]+$/;
+
+      if (!yourName && !partnerName) {
+        displayResult("Please enter both names.", "😢");
+        return false;
+      } else if (!yourName) {
+        displayResult("Please enter your name.", "😢");
+        return false;
+      } else if (!partnerName) {
+        displayResult("Please enter your partner's name.", "😢");
+        return false;
+      } else if (!namePattern.test(yourName) || !namePattern.test(partnerName)) {
+        displayResult("Please enter valid alphabetic names only.", "😢");
+        return false;
+      }
+
+      return true;
+    }
+
+    function displayResult(text, emoji) {
+      resultContainer.innerHTML = `<p>${text}</p><div class="emoji">${emoji}</div>`;
+      if (text.includes("100%")) {
+        resultContainer.style.color = "green";
+      } else if (text.includes("50%")) {
+        resultContainer.style.color = "red";
+      } else {
+        resultContainer.style.color = "blue";
+      }
+    }
+
+    function clearResult() {
+      resultContainer.innerHTML = "";
+      resultContainer.style.color = "inherit";
+    }
+
+    function showLoading(show) {
+      loadingSpinner.style.display = show ? "block" : "none";
+    }
+
+    function startProgressBar() {
+      progressBar.style.width = "0";
+      setTimeout(() => {
+        progressBar.style.width = "100%";
+      }, 100);
+    }
+
+    function completeProgressBar() {
+      progressBar.style.width = "100%";
+    }
+
+    function resetProgressBar() {
+      progressBar.style.width = "0";
+    }
+
+    function resetForm() {
+      yourNameInput.value = "";
+      partnerNameInput.value = "";
+      yourNameInput.focus();
+    }
+  </script>
+</body>
+
+</html>
