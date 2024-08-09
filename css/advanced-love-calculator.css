@@ -1,0 +1,115 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.love-calculator {
+  max-width: 400px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  text-align: center;
+  background-color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.love-calculator h2 {
+  margin-bottom: 20px;
+  font-size: 26px;
+  color: #444;
+}
+
+.love-calculator label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.love-calculator input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.love-calculator button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #28a745;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.love-calculator button:hover {
+  background-color: #218838;
+}
+
+.love-calculator button.clear-btn {
+  background-color: #dc3545;
+}
+
+.love-calculator button.clear-btn:hover {
+  background-color: #c82333;
+}
+
+#result {
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.emoji {
+  margin-top: 10px;
+  font-size: 32px;
+}
+
+.loading-spinner {
+  display: none;
+  margin: 20px auto;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #333;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.progress-bar {
+  width: 0;
+  height: 5px;
+  background-color: #28a745;
+  border-radius: 5px;
+  margin-top: 20px;
+  transition: width 1s ease-in-out;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .love-calculator {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .love-calculator h2 {
+    font-size: 20px;
+  }
+}
